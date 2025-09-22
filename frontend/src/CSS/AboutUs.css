@@ -1,0 +1,85 @@
+.about-us-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Hero Section */
+.hero-section {
+  background-color: #4caf50; /* green */
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 20px;
+}
+
+/* General Section Styling */
+section {
+  background-color: white;
+  padding: 60px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+section h2 {
+  font-size: 32px;
+  color: #2E7D32; /* dark green */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+section p, section li {
+  font-size: 18px;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  margin: 10px 0;
+}
+
+ul li a {
+  color: #4caf50;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Section content container */
+.section-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 36px;
+  }
+
+  .hero-section p {
+    font-size: 16px;
+  }
+
+  section h2 {
+    font-size: 28px;
+  }
+
+  section p, section li {
+    font-size: 16px;
+  }
+}

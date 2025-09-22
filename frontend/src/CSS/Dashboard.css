@@ -1,0 +1,29 @@
+.custom-dropdown {
+  width: 200px;                  /* set dropdown width */
+  display: flex;
+  justify-content: space-between; /* text left, arrow right */
+  align-items: center;
+  text-align: left;
+  padding-right: 1.5rem;          /* space for arrow */
+  position: relative;              /* align text left */
+}
+
+/* Optional: adjust arrow if needed */
+.custom-dropdown::after {
+  margin-left: auto;
+  content: '';
+  position: absolute;
+  right: 10px;                    /* distance from right edge */
+  top: 50%;                        /* vertical center */
+  transform: translateY(-50%);     /* adjust for exact center */
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid white;     /* arrow color, match toggle background */
+  pointer-events: none;             /* ensure arrow stays on the right */
+}
+
+.custom-dropdown + .dropdown-menu {
+  width: 200px;
+}

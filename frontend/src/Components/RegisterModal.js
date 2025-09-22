@@ -93,7 +93,7 @@
 
 import React, { useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
-import axios from "axios";
+//import axios from "axios";
 
 const RegisterModal = ({ show, handleClose, openLogin }) => {
   const [formData, setFormData] = useState({

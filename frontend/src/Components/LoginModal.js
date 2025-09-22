@@ -159,209 +159,209 @@
 // export default LoginModal;
 
 
-import React, { useState } from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import React, { useState } from "react";
+// import { Modal, Button, Form, Alert } from "react-bootstrap";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 
-const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) => {
-  const [isRegister, setIsRegister] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    nic: "",
-    farmerRegNo: "",
-    province: "",
-    district: "",
-    email: "",
-    mobile: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [username, setUsername] = useState(""); // admin username
-  const [password, setPassword] = useState(""); // admin password
-  const [role, setRole] = useState("farmer");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+// const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) => {
+//   const [isRegister, setIsRegister] = useState(false);
+//   const [formData, setFormData] = useState({
+//     fullName: "",
+//     nic: "",
+//     farmerRegNo: "",
+//     province: "",
+//     district: "",
+//     email: "",
+//     mobile: "",
+//     password: "",
+//     confirmPassword: "",
+//   });
+//   const [username, setUsername] = useState(""); // admin username
+//   const [password, setPassword] = useState(""); // admin password
+//   const [role, setRole] = useState("farmer");
+//   const [error, setError] = useState("");
+//   const [success, setSuccess] = useState(false);
 
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (role === "farmer" && isRegister) {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
+//   // Handle input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     if (role === "farmer" && isRegister) {
+//       setFormData({ ...formData, [name]: value });
+//     }
+//   };
 
-  // Handle login/register
-  const handleSubmit = async () => {
-    setError("");
-    if (role === "farmer") {
-      if (isRegister) {
-        // Registration validation
-        const requiredFields = [
-          "fullName",
-          "nic",
-          "farmerRegNo",
-          "province",
-          "district",
-          "email",
-          "mobile",
-          "password",
-          "confirmPassword",
-        ];
-        for (let field of requiredFields) {
-          if (!formData[field]) {
-            setError(`❌ ${field} is required`);
-            return;
-          }
-        }
-        if (formData.password !== formData.confirmPassword) {
-          setError("❌ Passwords do not match");
-          return;
-        }
+//   // Handle login/register
+//   const handleSubmit = async () => {
+//     setError("");
+//     if (role === "farmer") {
+//       if (isRegister) {
+//         // Registration validation
+//         const requiredFields = [
+//           "fullName",
+//           "nic",
+//           "farmerRegNo",
+//           "province",
+//           "district",
+//           "email",
+//           "mobile",
+//           "password",
+//           "confirmPassword",
+//         ];
+//         for (let field of requiredFields) {
+//           if (!formData[field]) {
+//             setError(`❌ ${field} is required`);
+//             return;
+//           }
+//         }
+//         if (formData.password !== formData.confirmPassword) {
+//           setError("❌ Passwords do not match");
+//           return;
+//         }
 
-        try {
-          const res = await axios.post("http://localhost:5000/api/auth/register", formData);
-          if (res.data.success) {
-            setSuccess(true);
-            setTimeout(() => {
-              setSuccess(false);
-              setIsRegister(false);
-            }, 2000);
-          }
-        } catch (err) {
-          setError(err.response?.data?.message || "❌ Registration failed");
-        }
-      } else {
-        // Farmer login
-        if (!formData.farmerRegNo || !formData.password) {
-          setError("❌ All fields are required");
-          return;
-        }
+//         try {
+//           const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+//           if (res.data.success) {
+//             setSuccess(true);
+//             setTimeout(() => {
+//               setSuccess(false);
+//               setIsRegister(false);
+//             }, 2000);
+//           }
+//         } catch (err) {
+//           setError(err.response?.data?.message || "❌ Registration failed");
+//         }
+//       } else {
+//         // Farmer login
+//         if (!formData.farmerRegNo || !formData.password) {
+//           setError("❌ All fields are required");
+//           return;
+//         }
 
-        try {
-          const res = await axios.post("http://localhost:5000/api/auth/login", {
-            farmerRegNo: formData.farmerRegNo,
-            password: formData.password,
-          });
+//         try {
+//           const res = await axios.post("http://localhost:5000/api/auth/login", {
+//             farmerRegNo: formData.farmerRegNo,
+//             password: formData.password,
+//           });
 
-          if (res.data.success) {
-            setIsLoggedIn(true);
-            setUserRole("farmer");
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("role", "farmer");
-            navigate("/dashboard");
-          }
-        } catch (err) {
-          setError(err.response?.data?.message || "❌ Login failed");
-        }
-      }
-    } else if (role === "admin") {
-      // Admin login
-      if (username === "admin" && password === "admin123") {
-        setIsLoggedIn(true);
-        setUserRole("admin");
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("role", "admin");
-        navigate("/admin");
-      } else {
-        setError("❌ Invalid admin credentials");
-      }
-    }
-  };
+//           if (res.data.success) {
+//             setIsLoggedIn(true);
+//             setUserRole("farmer");
+//             localStorage.setItem("isLoggedIn", "true");
+//             localStorage.setItem("role", "farmer");
+//             navigate("/dashboard");
+//           }
+//         } catch (err) {
+//           setError(err.response?.data?.message || "❌ Login failed");
+//         }
+//       }
+//     } else if (role === "admin") {
+//       // Admin login
+//       if (username === "admin" && password === "admin123") {
+//         setIsLoggedIn(true);
+//         setUserRole("admin");
+//         localStorage.setItem("isLoggedIn", "true");
+//         localStorage.setItem("role", "admin");
+//         navigate("/admin");
+//       } else {
+//         setError("❌ Invalid admin credentials");
+//       }
+//     }
+//   };
 
-  return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{isRegister ? "Farmer Register" : "Login"}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          {!isRegister && (
-            <Form.Group className="mb-3">
-              <Form.Label>Select Role</Form.Label>
-              <Form.Select
-                value={role}
-                onChange={(e) => {
-                  setRole(e.target.value);
-                  setIsRegister(false);
-                  setError("");
-                }}
-              >
-                <option value="farmer">Farmer</option>
-                <option value="admin">Admin</option>
-              </Form.Select>
-            </Form.Group>
-          )}
+//   return (
+//     <Modal show={show} onHide={handleClose} centered>
+//       <Modal.Header closeButton>
+//         <Modal.Title>{isRegister ? "Farmer Register" : "Login"}</Modal.Title>
+//       </Modal.Header>
+//       <Modal.Body>
+//         <Form>
+//           {!isRegister && (
+//             <Form.Group className="mb-3">
+//               <Form.Label>Select Role</Form.Label>
+//               <Form.Select
+//                 value={role}
+//                 onChange={(e) => {
+//                   setRole(e.target.value);
+//                   setIsRegister(false);
+//                   setError("");
+//                 }}
+//               >
+//                 <option value="farmer">Farmer</option>
+//                 <option value="admin">Admin</option>
+//               </Form.Select>
+//             </Form.Group>
+//           )}
 
-          {role === "farmer" && isRegister ? (
-            <>
-              {["fullName","nic","farmerRegNo","province","district","email","mobile","password","confirmPassword"].map((field) => (
-                <Form.Group key={field} className="mb-3">
-                  <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1")} *</Form.Label>
-                  <Form.Control
-                    type={field.toLowerCase().includes("password") ? "password" : "text"}
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              ))}
-            </>
-          ) : role === "farmer" ? (
-            <>
-              <Form.Group className="mb-3">
-                <Form.Label>Farmer Registration Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="farmerRegNo"
-                  value={formData.farmerRegNo}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <p className="mt-3 text-center">
-                Don’t have an account?{" "}
-                <span style={{ color: "#007bff", cursor: "pointer" }} onClick={() => setIsRegister(true)}>
-                  Create one
-                </span>
-              </p>
-            </>
-          ) : (
-            <>
-              <Form.Group className="mb-3">
-                <Form.Label>Admin Username</Form.Label>
-                <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Admin Password</Form.Label>
-                <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              </Form.Group>
-            </>
-          )}
+//           {role === "farmer" && isRegister ? (
+//             <>
+//               {["fullName","nic","farmerRegNo","province","district","email","mobile","password","confirmPassword"].map((field) => (
+//                 <Form.Group key={field} className="mb-3">
+//                   <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1")} *</Form.Label>
+//                   <Form.Control
+//                     type={field.toLowerCase().includes("password") ? "password" : "text"}
+//                     name={field}
+//                     value={formData[field]}
+//                     onChange={handleChange}
+//                   />
+//                 </Form.Group>
+//               ))}
+//             </>
+//           ) : role === "farmer" ? (
+//             <>
+//               <Form.Group className="mb-3">
+//                 <Form.Label>Farmer Registration Number</Form.Label>
+//                 <Form.Control
+//                   type="text"
+//                   name="farmerRegNo"
+//                   value={formData.farmerRegNo}
+//                   onChange={handleChange}
+//                 />
+//               </Form.Group>
+//               <Form.Group className="mb-3">
+//                 <Form.Label>Password</Form.Label>
+//                 <Form.Control
+//                   type="password"
+//                   name="password"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                 />
+//               </Form.Group>
+//               <p className="mt-3 text-center">
+//                 Don’t have an account?{" "}
+//                 <span style={{ color: "#007bff", cursor: "pointer" }} onClick={() => setIsRegister(true)}>
+//                   Create one
+//                 </span>
+//               </p>
+//             </>
+//           ) : (
+//             <>
+//               <Form.Group className="mb-3">
+//                 <Form.Label>Admin Username</Form.Label>
+//                 <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+//               </Form.Group>
+//               <Form.Group className="mb-3">
+//                 <Form.Label>Admin Password</Form.Label>
+//                 <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+//               </Form.Group>
+//             </>
+//           )}
 
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">✅ Registration successful!</Alert>}
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-        <Button variant="primary" onClick={handleSubmit}>{isRegister ? "Register" : "Login"}</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
+//           {error && <Alert variant="danger">{error}</Alert>}
+//           {success && <Alert variant="success">✅ Registration successful!</Alert>}
+//         </Form>
+//       </Modal.Body>
+//       <Modal.Footer>
+//         <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+//         <Button variant="primary" onClick={handleSubmit}>{isRegister ? "Register" : "Login"}</Button>
+//       </Modal.Footer>
+//     </Modal>
+//   );
+// };
 
-export default LoginModal;
+// export default LoginModal;
 
 
 // import React, { useState } from "react";
@@ -723,3 +723,242 @@ export default LoginModal;
 // };
 
 // export default LoginModal;
+
+
+import React, { useState } from "react";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
+const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) => {
+  const [isRegister, setIsRegister] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    nic: "",
+    farmerRegNo: "",
+    province: "",
+    district: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [username, setUsername] = useState(""); // admin username
+  const [password, setPassword] = useState(""); // admin password
+  const [role, setRole] = useState("farmer");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (role === "farmer") {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  // Save registered farmers in localStorage
+  const saveFarmer = (farmer) => {
+    let farmers = JSON.parse(localStorage.getItem("farmers")) || [];
+    farmers.push(farmer);
+    localStorage.setItem("farmers", JSON.stringify(farmers));
+  };
+
+  // Find farmer by regNo + password
+  const findFarmer = (regNo, pass) => {
+    let farmers = JSON.parse(localStorage.getItem("farmers")) || [];
+    return farmers.find(
+      (f) => f.farmerRegNo === regNo && f.password === pass
+    );
+  };
+
+  // Handle login/register
+  const handleSubmit = () => {
+    setError("");
+
+    if (role === "farmer") {
+      if (isRegister) {
+        // Registration validation
+        const requiredFields = [
+          "fullName",
+          "nic",
+          "farmerRegNo",
+          "province",
+          "district",
+          "email",
+          "mobile",
+          "password",
+          "confirmPassword",
+        ];
+        for (let field of requiredFields) {
+          if (!formData[field]) {
+            setError(`❌ ${field} is required`);
+            return;
+          }
+        }
+        if (formData.password !== formData.confirmPassword) {
+          setError("❌ Passwords do not match");
+          return;
+        }
+
+        // Save farmer locally
+        saveFarmer(formData);
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+          setIsRegister(false);
+        }, 2000);
+      } else {
+        // Farmer login
+        if (!formData.farmerRegNo || !formData.password) {
+          setError("❌ All fields are required");
+          return;
+        }
+
+        const farmer = findFarmer(formData.farmerRegNo, formData.password);
+        if (farmer) {
+          setIsLoggedIn(true);
+          setUserRole("farmer");
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("role", "farmer");
+          navigate("/dashboard");
+        } else {
+          setError("❌ Invalid farmer credentials");
+        }
+      }
+    } else if (role === "admin") {
+      // Admin login (hardcoded)
+      if (username === "admin" && password === "admin123") {
+        setIsLoggedIn(true);
+        setUserRole("admin");
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("role", "admin");
+        navigate("/admin");
+      } else {
+        setError("❌ Invalid admin credentials");
+      }
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{isRegister ? "Farmer Register" : "Login"}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          {!isRegister && (
+            <Form.Group className="mb-3">
+              <Form.Label>Select Role</Form.Label>
+              <Form.Select
+                value={role}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  setIsRegister(false);
+                  setError("");
+                }}
+              >
+                <option value="farmer">Farmer</option>
+                <option value="admin">Admin</option>
+              </Form.Select>
+            </Form.Group>
+          )}
+
+          {role === "farmer" && isRegister ? (
+            <>
+              {[
+                "fullName",
+                "nic",
+                "farmerRegNo",
+                "province",
+                "district",
+                "email",
+                "mobile",
+                "password",
+                "confirmPassword",
+              ].map((field) => (
+                <Form.Group key={field} className="mb-3">
+                  <Form.Label>
+                    {field.charAt(0).toUpperCase() +
+                      field.slice(1).replace(/([A-Z])/g, " $1")}{" "}
+                    *
+                  </Form.Label>
+                  <Form.Control
+                    type={field.toLowerCase().includes("password") ? "password" : "text"}
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              ))}
+            </>
+          ) : role === "farmer" ? (
+            <>
+              <Form.Group className="mb-3">
+                <Form.Label>Farmer Registration Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="farmerRegNo"
+                  value={formData.farmerRegNo}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <p className="mt-3 text-center">
+                Don’t have an account?{" "}
+                <span
+                  style={{ color: "#007bff", cursor: "pointer" }}
+                  onClick={() => setIsRegister(true)}
+                >
+                  Create one
+                </span>
+              </p>
+            </>
+          ) : (
+            <>
+              <Form.Group className="mb-3">
+                <Form.Label>Admin Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Admin Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+            </>
+          )}
+
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">✅ Registration successful!</Alert>}
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          {isRegister ? "Register" : "Login"}
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default LoginModal;
+

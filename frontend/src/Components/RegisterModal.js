@@ -117,54 +117,112 @@ const RegisterModal = ({ show, handleClose, openLogin }) => {
   };
 
   // Handle register button
-  const handleRegister = async () => {
-    setError("");
-    setSuccess(false);
+  // const handleRegister = async () => {
+  //   setError("");
+  //   setSuccess(false);
 
-    // Simple validation
-    const mandatoryFields = [
-      "fullName",
-      "nic",
-      "farmerRegNo",
-      "province",
-      "district",
-      "email",
-      "mobile",
-      "password",
-      "confirmPassword",
-    ];
+  
 
-    for (let field of mandatoryFields) {
-      if (!formData[field]) {
-        setError(`❌ ${field} is required`);
-        return;
-      }
-    }
+  //   // Simple validation
+  //   const mandatoryFields = [
+  //     "fullName",
+  //     "nic",
+  //     "farmerRegNo",
+  //     "province",
+  //     "district",
+  //     "email",
+  //     "mobile",
+  //     "password",
+  //     "confirmPassword",
+  //   ];
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("❌ Passwords do not match");
+  //   for (let field of mandatoryFields) {
+  //     if (!formData[field]) {
+  //       setError(`❌ ${field} is required`);
+  //       return;
+  //     }
+  //   }
+
+  //   if (formData.password !== formData.confirmPassword) {
+  //     setError("❌ Passwords do not match");
+  //     return;
+  //   }
+
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:5000/api/auth/register",
+  //       formData
+  //     );
+
+  //     if (res.data.message) {
+  //       setSuccess(true);
+  //       setError("");
+  //       setTimeout(() => {
+  //         setSuccess(false);
+  //         handleClose();
+  //         openLogin(); // open login modal after successful registration
+  //       }, 2000);
+  //     }
+  //   } catch (err) {
+  //     setError(err.response?.data?.message || "❌ Registration failed");
+  //   }
+  // };
+
+  // Handle register button
+const handleRegister = () => {
+  setError("");
+  setSuccess(false);
+
+  const mandatoryFields = [
+    "fullName",
+    "nic",
+    "farmerRegNo",
+    "province",
+    "district",
+    "email",
+    "mobile",
+    "password",
+    "confirmPassword",
+  ];
+
+  for (let field of mandatoryFields) {
+    if (!formData[field]) {
+      setError(`❌ ${field} is required`);
       return;
     }
+  }
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        formData
-      );
+  if (formData.password !== formData.confirmPassword) {
+    setError("❌ Passwords do not match");
+    return;
+  }
 
-      if (res.data.message) {
-        setSuccess(true);
-        setError("");
-        setTimeout(() => {
-          setSuccess(false);
-          handleClose();
-          openLogin(); // open login modal after successful registration
-        }, 2000);
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "❌ Registration failed");
-    }
-  };
+  // ✅ Save farmer in localStorage
+  const farmers = JSON.parse(localStorage.getItem("farmers")) || [];
+
+  // Check if farmer already exists
+  const exists = farmers.find(
+    (f) => f.nic === formData.nic || f.farmerRegNo === formData.farmerRegNo
+  );
+
+  if (exists) {
+    setError("❌ Farmer already registered");
+    return;
+  }
+
+  // Add new farmer
+  farmers.push(formData);
+  localStorage.setItem("farmers", JSON.stringify(farmers));
+
+  setSuccess(true);
+  setError("");
+
+  setTimeout(() => {
+    setSuccess(false);
+    handleClose();
+    openLogin(); // go to login modal
+  }, 2000);
+};
 
   return (
     <Modal show={show} onHide={handleClose} centered>
